@@ -326,12 +326,6 @@ export default function CheckoutPage() {
                     (e.currentTarget as HTMLElement).style.display = "none";
                   }}
                 />
-                <span className="font-display text-lg font-bold tracking-tight text-foreground">
-                  keycop<span className="text-primary">.</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 font-mono text-[0.62rem] uppercase tracking-widest text-primary">
-                <Lock className="h-3.5 w-3.5" /> PCI DSS Compliant
               </div>
             </div>
 
