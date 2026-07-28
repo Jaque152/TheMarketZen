@@ -2,9 +2,70 @@ import { NextResponse } from "next/server";
 
 const KEYCOP_BASE_URL = "https://pagos.keycop.com.mx/api/v1";
 
+// 1. Definición estricta de interfaces 
+interface CheckoutForm {
+  nombre: string;
+  email: string;
+  telefono?: string;
+  empresa?: string;
+  direccion: string;
+  ciudad: string;
+  cp: string;
+  countryIdx?: string;
+  card: string;
+  exp: string;
+  cvc: string;
+  cardName: string;
+}
+
+interface ProductContent {
+  name: string;
+  features?: string[];
+}
+
+interface CartLineItem {
+  quantity: number;
+  product: {
+    id: string | number;
+    price: number;
+    content: Record<string, ProductContent>;
+  };
+}
+
+interface CheckoutRequestPayload {
+  form: CheckoutForm;
+  items: CartLineItem[];
+  subtotal: number;
+  iva: number;
+  total: number;
+  lang: "es" | "en" | string;
+}
+
+interface EmailError {
+  target: "customer" | "admin";
+  error: unknown;
+}
+
+interface EmailStatus {
+  attempted: boolean;
+  customerSuccess: boolean;
+  adminSuccess: boolean;
+  errors: EmailError[];
+}
+
+interface EmailTemplateParams {
+  orderId: string;
+  form: CheckoutForm;
+  items: CartLineItem[];
+  subtotal: number;
+  iva: number;
+  total: number;
+  lang: string;
+}
+
 export async function POST(req: Request) {
   try {
-    const { form, items, subtotal, iva, total, lang } = await req.json();
+    const { form, items, subtotal, iva, total, lang }: CheckoutRequestPayload = await req.json();
 
     if (!form || !items || items.length === 0) {
       return NextResponse.json(
@@ -69,15 +130,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. Formatear ítems para Keycop
-    const formattedItems = items.map((line: any) => ({
-      title: line.product.content[lang].name,
+    const formattedItems = items.map((line: CartLineItem) => ({
+      title: line.product.content[lang]?.name ?? "Producto",
       amount: Number(line.product.price),
       quantity: Number(line.quantity),
       id: String(line.product.id),
     }));
 
-    // 5. Procesar cobro (Sale)
+    // 5. Procesar cobro 
     const salePayload = {
       amount: Number(total.toFixed(2)),
       currency: 484, // MXN
@@ -121,8 +181,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // 6. Enviar correos con Diagnóstico de Resend
-    let emailStatus = { attempted: false, customerSuccess: false, adminSuccess: false, errors: [] as any[] };
+    // 6. Enviar correos 
+    const emailStatus: EmailStatus = { 
+      attempted: false, 
+      customerSuccess: false, 
+      adminSuccess: false, 
+      errors: [] 
+    };
 
     if (process.env.RESEND_API_KEY) {
       emailStatus.attempted = true;
@@ -152,9 +217,10 @@ export async function POST(req: Request) {
           console.log("[Resend Customer Success]", clientData);
           emailStatus.customerSuccess = true;
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("[Resend Customer Exception]", err);
-        emailStatus.errors.push({ target: "customer", error: err.message });
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        emailStatus.errors.push({ target: "customer", error: errorMessage });
       }
 
       // Envío al Admin
@@ -180,22 +246,22 @@ export async function POST(req: Request) {
           console.log("[Resend Admin Success]", adminData);
           emailStatus.adminSuccess = true;
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("[Resend Admin Exception]", err);
-        emailStatus.errors.push({ target: "admin", error: err.message });
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        emailStatus.errors.push({ target: "admin", error: errorMessage });
       }
     } else {
       console.warn("[Resend Warning] RESEND_API_KEY no se encontró en las variables de entorno.");
     }
 
-    // Devolvemos el status del correo para que lo veas al inspeccionar en el navegador
     return NextResponse.json({ 
       success: true, 
       orderId, 
       status: saleData.status,
       emailStatus 
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Checkout Route Exception]", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -204,15 +270,14 @@ export async function POST(req: Request) {
   }
 }
 
-// Generador de plantillas HTML
-function buildEmailTemplate({ orderId, form, items, subtotal, iva, total, lang }: any) {
+function buildEmailTemplate({ orderId, form, items, subtotal, iva, total, lang }: EmailTemplateParams) {
   const isEn = lang === "en";
   const itemsListHtml = items
     .map(
-      (line: any) => `
+      (line: CartLineItem) => `
       <tr>
         <td style="padding: 12px 0; border-bottom: 1px solid #eaeaea;">
-          <strong>${line.product.content[lang].name}</strong>
+          <strong>${line.product.content[lang]?.name ?? "Producto"}</strong>
           <br /><small style="color: #666;">${isEn ? "Qty" : "Cant."}: ${line.quantity}</small>
         </td>
         <td style="padding: 12px 0; border-bottom: 1px solid #eaeaea; text-align: right;">

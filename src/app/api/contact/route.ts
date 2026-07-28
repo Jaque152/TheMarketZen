@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       } else {
         console.error("[Resend Contact Customer Error]", customerData);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("[Resend Contact Customer Exception]", err);
     }
 
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
       success: true,
       emailStatus: { customerSuccess, adminSuccess },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Contact API Exception]", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
