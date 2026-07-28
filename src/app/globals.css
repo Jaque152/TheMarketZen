@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm Editorial Studio palette */
+    --background: 40 38% 93%;        /* bone / cream paper */
+    --foreground: 24 24% 11%;        /* espresso ink */
+    --card: 40 44% 96%;              /* lighter cream */
+    --card-foreground: 24 24% 11%;
+    --popover: 40 44% 97%;
+    --popover-foreground: 24 24% 11%;
+    --primary: 13 72% 46%;           /* burnt terracotta / rust */
+    --primary-foreground: 40 44% 97%;
+    --secondary: 36 34% 87%;         /* warm sand */
+    --secondary-foreground: 24 24% 14%;
+    --muted: 36 26% 88%;
+    --muted-foreground: 28 12% 40%;
+    --accent: 38 60% 52%;            /* ochre / gold */
+    --accent-foreground: 24 30% 12%;
+    --destructive: 4 66% 44%;
+    --destructive-foreground: 40 44% 97%;
+    --border: 30 18% 82%;
+    --input: 30 18% 80%;
+    --ring: 13 72% 46%;
+    --radius: 0.25rem;
+
+    /* Brand tokens */
+    --ink: 24 28% 9%;                /* near-black warm for dark sections */
+    --terracotta: 13 72% 46%;
+    --ochre: 38 60% 52%;
+    --clay: 16 42% 58%;
+    --cream: 40 44% 95%;
+    --sage: 90 12% 44%;
+
+    --chart-1: 13 72% 46%;
+    --chart-2: 38 60% 52%;
+    --chart-3: 16 42% 58%;
+    --chart-4: 90 12% 44%;
+    --chart-5: 24 24% 20%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: hsl(var(--terracotta));
+    color: hsl(var(--cream));
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+  }
+  .font-mono-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+
+  /* Editorial eyebrow label */
+  .eyebrow {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+
+  /* Section wrapper */
+  .section-x {
+    @apply px-5 sm:px-8 lg:px-14 xl:px-20;
+  }
+
+  /* Ink (dark) section */
+  .surface-ink {
+    background-color: hsl(var(--ink));
+    color: hsl(var(--cream));
+  }
+
+  /* Warm image treatment (duotone-ish) */
+  .img-warm {
+    filter: saturate(0.85) contrast(1.02);
+  }
+
+  /* Underline link */
+  .link-underline {
+    background-image: linear-gradient(hsl(var(--terracotta)), hsl(var(--terracotta)));
+    background-size: 0% 1.5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover {
+    background-size: 100% 1.5px;
+  }
+}
+
+@layer utilities {
+  /* Grain / noise overlay */
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .paper-texture {
+    background-image:
+      radial-gradient(hsl(30 18% 78% / 0.35) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Reveal on load */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes reveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .marquee-track {
+    animation: marquee 32s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .animate-float {
+    animation: float 7s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  /* Text stroke display accent */
+  .text-outline {
+    -webkit-text-stroke: 1.5px hsl(var(--foreground));
+    color: transparent;
+  }
+  .text-outline-cream {
+    -webkit-text-stroke: 1.5px hsl(var(--cream));
+    color: transparent;
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
