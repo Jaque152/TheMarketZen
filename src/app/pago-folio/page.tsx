@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, FileText, DollarSign, AlertCircle } from "lucide-react";
+import { ArrowRight, FileText, DollarSign } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
@@ -17,10 +17,9 @@ type FolioFields = {
 
 export default function PagoFolioPage() {
   const { lang, t } = useLanguage();
-  // El contexto del carrito suele exportar `addItem` o `addToCart`. Lo destructuramos de forma dinámica.
-  const cartContext = useCart() as any; 
-  const addToCartFn = cartContext.addItem || cartContext.addToCart; 
-  const setIsOpen = cartContext.setIsOpen;
+  
+  // Solución: Desestructuración directa y tipada sin usar 'any'
+  const { addItem, setIsOpen } = useCart();
 
   const [form, setForm] = useState<FolioFields>({
     folio: "",
@@ -55,16 +54,12 @@ export default function PagoFolioPage() {
     // Generar el ID dinámico interceptable
     const dynamicId = `folio:::${form.folio.trim()}:::${form.monto.trim()}:::${encodeURIComponent(form.nombre.trim())}`;
 
-    // Añadir al carrito y abrir el panel lateral
-    if (addToCartFn) {
-      addToCartFn(dynamicId, 1);
-      if (setIsOpen) setIsOpen(true);
-      
-      // Limpiar el formulario
-      setForm({ folio: "", monto: "", nombre: "" });
-    } else {
-      console.error("No se encontró la función para añadir al carrito en useCart()");
-    }
+    // Añadir al carrito y abrir el panel lateral de forma nativa
+    addItem(dynamicId, 1);
+    setIsOpen(true);
+    
+    // Limpiar el formulario
+    setForm({ folio: "", monto: "", nombre: "" });
   }
 
   return (
