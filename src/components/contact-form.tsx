@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,12 @@ import { cn } from "@/lib/utils";
 const MAX = 180;
 
 export function ContactForm({ className }: { className?: string }) {
-  const { t } = useLanguage();
+  const languageContext = useLanguage();
+  const { t } = languageContext;
+  
+  // Obtenemos el idioma actual de forma segura según la propiedad de tu context (lang o language)
+  const lang = (languageContext as Record<string, unknown>).lang || (languageContext as Record<string, unknown>).language || "es";
+
   const [form, setForm] = useState({
     nombre: "",
     email: "",
@@ -22,6 +27,7 @@ export function ContactForm({ className }: { className?: string }) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function update(key: keyof typeof form, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -40,16 +46,47 @@ export function ContactForm({ className }: { className?: string }) {
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) {
       toast.error(t.form.errCheck);
       return;
     }
-    setSent(true);
-    toast.success(t.form.toastTitle, { description: t.form.toastDesc });
-    setForm({ nombre: "", email: "", telefono: "", mensaje: "" });
-    setTimeout(() => setSent(false), 4000);
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+          lang,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Ocurrió un error al enviar el correo.");
+      }
+
+      setSent(true);
+      toast.success(t.form.toastTitle, { description: t.form.toastDesc });
+      setForm({ nombre: "", email: "", telefono: "", mensaje: "" });
+      setTimeout(() => setSent(false), 5000);
+    } catch (error) {
+      console.error("[Contact Form Submit Error]", error);
+      toast.error(
+        lang === "en"
+          ? "Could not send your message. Please try again."
+          : "No se pudo enviar tu mensaje. Por favor intenta de nuevo."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (sent) {
@@ -57,7 +94,7 @@ export function ContactForm({ className }: { className?: string }) {
       <div
         className={cn(
           "flex min-h-[420px] flex-col items-center justify-center rounded-[3px] border border-foreground/10 bg-card p-10 text-center",
-          className,
+          className
         )}
       >
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-cream">
@@ -87,6 +124,7 @@ export function ContactForm({ className }: { className?: string }) {
           onChange={(e) => update("nombre", e.target.value)}
           placeholder={t.form.namePh}
           aria-invalid={!!errors.nombre}
+          disabled={isSubmitting}
         />
         {errors.nombre && (
           <p className="text-xs text-destructive">{errors.nombre}</p>
@@ -104,6 +142,7 @@ export function ContactForm({ className }: { className?: string }) {
           onChange={(e) => update("email", e.target.value)}
           placeholder={t.form.emailPh}
           aria-invalid={!!errors.email}
+          disabled={isSubmitting}
         />
         {errors.email && (
           <p className="text-xs text-destructive">{errors.email}</p>
@@ -120,6 +159,7 @@ export function ContactForm({ className }: { className?: string }) {
           value={form.telefono}
           onChange={(e) => update("telefono", e.target.value)}
           placeholder={t.form.phonePh}
+          disabled={isSubmitting}
         />
       </div>
 
@@ -138,11 +178,21 @@ export function ContactForm({ className }: { className?: string }) {
           maxLength={MAX}
           onChange={(e) => update("mensaje", e.target.value)}
           placeholder={t.form.messagePh}
+          disabled={isSubmitting}
         />
       </div>
 
-      <Button type="submit" size="lg" className="justify-self-start">
-        {t.form.submit} <ArrowRight className="h-4 w-4" />
+      <Button type="submit" size="lg" className="justify-self-start" disabled={isSubmitting}>
+        {isSubmitting ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            {lang === "en" ? "Sending..." : "Enviando..."}
+          </>
+        ) : (
+          <>
+            {t.form.submit} <ArrowRight className="h-4 w-4" />
+          </>
+        )}
       </Button>
     </form>
   );

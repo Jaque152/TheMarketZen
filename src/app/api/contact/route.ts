@@ -24,8 +24,8 @@ export async function POST(req: Request) {
       );
     }
 
+    const adminEmail = "administracion@themarketzen.com";
     const fromEmail = "The Market Zen <administracion@themarketzen.com>";
-
     const isEn = lang === "en";
 
     // Plantillas de correo HTML
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           from: fromEmail,
-          to: [fromEmail], 
+          to: [adminEmail],
           subject: `[Nueva Consulta web] ${nombre} (${email})`,
           html: emailTemplates.admin,
         }),
@@ -92,8 +92,15 @@ export async function POST(req: Request) {
       } else {
         console.error("[Resend Contact Admin Error]", adminData);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("[Resend Contact Admin Exception]", err);
+    }
+
+    if (!customerSuccess && !adminSuccess) {
+      return NextResponse.json(
+        { error: "Failed to send emails via Resend." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({

@@ -270,6 +270,20 @@ const es = {
     formSub:
       "Completa el formulario y te daremos respuesta lo antes posible. Entre más detalles compartas, más precisa será nuestra asesoría.",
   },
+  folio: {
+    eyebrow: "Pago a la medida",
+    title: "Paga tu cotización o plan personalizado.",
+    sub: "Ingresa los detalles de tu cotización aprobada para añadir tu plan al carrito y proceder con el pago de forma segura y cifrada.",
+    folioLabel: "Número de folio o referencia",
+    folioPh: "Ej. TMZ-001",
+    amountLabel: "Monto a pagar (Sin IVA)",
+    amountPh: "Ej. 15000",
+    nameLabel: "Concepto o Nombre del Proyecto",
+    namePh: "Ej. Proyecto integral de Branding",
+    submit: "Añadir folio al carrito",
+    errReq: "Este campo es obligatorio",
+    errAmount: "Ingresa un monto numérico válido mayor a 0",
+  },
   product: {
     back: "Volver al catálogo",
     included: "Qué incluye este servicio",
@@ -586,6 +600,20 @@ const en: Dict = {
     formTitle: "Send us your inquiry",
     formSub:
       "Complete the form below and we will get back to you as soon as possible. The more details you share, the more tailored our guidance will be.",
+  },
+  folio: {
+    eyebrow: "Custom Payment",
+    title: "Pay your custom quote or tailored plan.",
+    sub: "Enter the details of your approved quote to add your custom plan to the cart and proceed with secure, encrypted payment.",
+    folioLabel: "Invoice or Reference Number",
+    folioPh: "E.g. TMZ-001",
+    amountLabel: "Amount to pay (Before VAT)",
+    amountPh: "E.g. 15000",
+    nameLabel: "Project Name or Description",
+    namePh: "E.g. Comprehensive Branding Project",
+    submit: "Add invoice to cart",
+    errReq: "This field is required",
+    errAmount: "Enter a valid numeric amount greater than 0",
   },
   product: {
     back: "Back to catalog",

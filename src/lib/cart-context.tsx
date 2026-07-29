@@ -8,7 +8,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { products, IVA_RATE, type Product } from "./products";
+// 1. Añadimos getProduct a las importaciones
+import { getProduct, IVA_RATE, type Product } from "./products";
 
 export type CartLine = {
   id: string;
@@ -100,7 +101,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const detailedLines = useMemo(() => {
     return lines
       .map((l) => {
-        const product = products.find((p) => p.id === l.id);
+        // 2. EL CAMBIO CLAVE: Usamos getProduct(l.id) en lugar de products.find()
+        const product = getProduct(l.id);
         return product ? { product, quantity: l.quantity } : null;
       })
       .filter((v): v is { product: Product; quantity: number } => v !== null);

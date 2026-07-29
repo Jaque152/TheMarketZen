@@ -342,6 +342,44 @@ export const products: Product[] = [
 ];
 
 export function getProduct(id: string): Product | undefined {
+  if (!id) return undefined;
+
+  // 1. Interceptar el pago de folio dinámico
+  if (id.startsWith("folio:::")) {
+    const [, folio, amountStr, rawName] = id.split(":::");
+    const name = decodeURIComponent(rawName || "Plan personalizado");
+    const amount = Number(amountStr);
+
+    return {
+      id,
+      price: isNaN(amount) ? 0 : amount,
+      category: "estrategia",
+      tone: "ink",
+      index: "FL",
+      content: {
+        es: {
+          name: `${name} (Folio: ${folio})`,
+          tagline: "Pago a la medida",
+          description: "Pago de cotización o saldo pendiente.",
+          features: [
+            "Pago de plan personalizado o saldo pendiente.",
+            "Los entregables aplican según la cotización aprobada.",
+          ],
+        },
+        en: {
+          name: `${name} (Ref: ${folio})`,
+          tagline: "Custom Payment",
+          description: "Custom quote or pending balance payment.",
+          features: [
+            "Payment for custom structured tailored plan.",
+            "Deliverables apply according to the approved quote.",
+          ],
+        },
+      },
+    } as Product;
+  }
+
+  // 2. Comportamiento normal para los 12 productos del catálogo
   return products.find((p) => p.id === id);
 }
 
