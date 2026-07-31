@@ -80,15 +80,15 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-6 border-t border-cream/10 pt-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {t.footer.legal.map((label) => (
-              <Link
-                key={label}
-                href="/contacto"
-                className="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-cream/45 transition-colors hover:text-cream"
-              >
-                {label}
-              </Link>
-            ))}
+            {t.footer.legal.map((item) => (
+  <Link
+    key={item.href}
+    href={item.href}
+    className="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-cream/45 transition-colors hover:text-cream"
+  >
+    {item.label}
+  </Link>
+))}
           </div>
           <div className="flex items-center gap-3">
             <span className="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-cream/45">

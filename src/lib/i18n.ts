@@ -148,9 +148,9 @@ const es = {
     phoneLabel: "Teléfono",
     emailLabel: "Correo",
     legal: [
-      "Aviso de Privacidad",
-      "Términos del Servicio",
-      "Políticas de Devolución",
+      { label: "Aviso de Privacidad", href: "/aviso-privacidad" },
+      { label: "Términos del Servicio", href: "/terminos-servicio" },
+      { label: "Políticas de Devolución", href: "/politicas-devolucion" },
     ],
     accept: "Métodos de pago",
     rights: "themarketzen.com · Estudio Creativo · CDMX",
@@ -339,6 +339,13 @@ const es = {
       },
     ],
   },
+  legal: {
+    avisoPrivacidad: "Aviso de Privacidad",
+    terminosServicio: "Términos del Servicio",
+    politicasDevolucion: "Políticas de Devolución",
+    backToHome: " Volver al inicio",
+    lastUpdated: "Última actualización",
+  },
 };
 
 export type Dict = typeof es;
@@ -488,7 +495,11 @@ const en: Dict = {
     addressLabel: "Location",
     phoneLabel: "Phone",
     emailLabel: "Email",
-    legal: ["Privacy Policy", "Terms of Service", "Refund Policy"],
+    legal: [
+      { label: "Privacy Policy", href: "/aviso-privacidad" },
+      { label: "Terms of Service", href: "/terminos-servicio" },
+      { label: "Refund Policy", href: "/politicas-devolucion" },
+    ],
     accept: "Payment methods",
     rights: "themarketzen.com · Creative Studio · CDMX",
   },
@@ -669,6 +680,13 @@ const en: Dict = {
         a: "We operate with secure gateways accepting Visa and Mastercard credit and debit cards.",
       },
     ],
+  },
+  legal: {
+    avisoPrivacidad: "Privacy Policy",
+    terminosServicio: "Terms of Service",
+    politicasDevolucion: "Refund Policy",
+    backToHome: " Back to home",
+    lastUpdated: "Last updated",
   },
 };
 
