@@ -129,7 +129,7 @@ const es = {
       { label: "Horario de atención", value: "Lun a Vie · 8:30 a 18:30" },
       {
         label: "Ubicación",
-        value: "Av. Tamaulipas 150, Hipódromo Condesa, 06100, CDMX.",
+        value: "Av. Tamaulipas 150, p.18, int.1801, Hipódromo Condesa, 06100, CDMX.",
       },
       { label: "Teléfono directo", value: "(+52) 1 55 5553 0519" },
       { label: "Correo de contacto", value: "administracion@themarketzen.com" },
@@ -470,7 +470,7 @@ const en: Dict = {
       { label: "Business hours", value: "Mon–Fri · 8:30 to 18:30" },
       {
         label: "Location",
-        value: "Av. Tamaulipas 150, Hipódromo Condesa, 06100, CDMX.",
+        value: "Av. Tamaulipas 150, p.18, int.1801, Hipódromo Condesa, 06100, CDMX.",
       },
       { label: "Direct phone", value: "(+52) 1 55 5553 0519" },
       { label: "Contact email", value: "administracion@themarketzen.com" },
