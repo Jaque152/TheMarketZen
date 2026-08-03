@@ -10,7 +10,7 @@ export function Objectives() {
         {/* Image */}
         <div className="relative min-h-[320px] lg:min-h-full">
           <img
-            src="https://ext.same-assets.com/2747936367/3218588452.jpeg"
+            src="https://plus.unsplash.com/premium_photo-1683980578016-a1f980719ec2?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Dardo en el centro de la diana"
             className="absolute inset-0 h-full w-full object-cover"
           />
