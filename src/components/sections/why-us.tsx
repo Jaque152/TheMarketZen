@@ -44,7 +44,7 @@ export function WhyUs() {
           <div className="lg:sticky lg:top-28">
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2px] bg-secondary">
               <img
-                src="https://ext.same-assets.com/2747936367/1812419857.jpeg"
+                src="https://plus.unsplash.com/premium_photo-1684179641331-e89c6320b6a9?q=80&w=784&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Miembro del equipo creativo trabajando"
                 className="h-full w-full object-cover"
               />
