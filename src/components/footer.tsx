@@ -113,7 +113,7 @@ export function Footer() {
       {/* Oversized watermark editorial */}
       <div
         aria-hidden
-        className="pointer-events-none select-none whitespace-nowrap px-4 text-center font-display text-[15vw] leading-[0.8] text-cream/[0.04]"
+        className="pointer-events-none select-none whitespace-nowrap px-4 text-center font-display text-[10vw] leading-[0.8] text-cream/[0.04]"
       >
         The&nbsp;Market&nbsp;Zen
       </div>
