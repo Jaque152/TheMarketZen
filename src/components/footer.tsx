@@ -64,7 +64,7 @@ export function Footer() {
             <ul className="mt-6 space-y-4 text-sm text-cream/75">
               <li>
                 <p className="text-cream/40">{t.footer.addressLabel}</p>
-                Av. Tamaulipas 150, Hipódromo Condesa, 06100, CDMX.
+                Av. Tamaulipas 150, p.18, int.1801, Hipódromo Condesa, 06100, CDMX.
               </li>
               <li>
                 <p className="text-cream/40">{t.footer.phoneLabel}</p>
